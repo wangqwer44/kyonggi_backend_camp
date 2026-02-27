@@ -9,44 +9,57 @@ public class ClientConsole implements ChatIF {
 
 	ChatClient client;
 
-	public ClientConsole(String host, int port) {
-		try {
-			client = new ChatClient(host, port, this);
-		} catch(IOException exception) {
-			System.out.println("Error: Can't setup connection!" + " Terminating client.");
-			System.exit(1);
-		}
+	public ClientConsole(String host, int port, String login) {
+		
+			client = new ChatClient(host, port, login,  this);
 	}
 
 	public void accept() {
 		try {
 			BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 			String message;
+			
 
-			while (true) {
-				message = fromConsole.readLine();
-				client.handleMessageFromClientUI(message);
+				while (true) {
+					message = fromConsole.readLine();
+					client.handleMessageFromClientUI(message);
 			}
-		} catch(Exception ex) {
-			System.out.println("Unexpected error while reading from console!");
+			
+		} catch(NullPointerException e) {}
+		catch(Exception ex){
+		System.out.println("Unexpected error while reading from console!");
 		}
 	}
 
 	public void display(String message) {
-		System.out.println("> " + message);
+		System.out.println( message);
 	}
 
 	public static void main(String[] args) {
 		String host = "";
 		int port = 0;
+		String loginID = null;
+
 
 		try {
-
-		} catch(ArrayIndexOutOfBoundsException e) {
+		loginID = args[0];
+		} catch(ArrayIndexOutOfBoundsException e){
+		System.out.println("Error - no login id specified. connection stopped.");
+		System.exit(1);
+}
+		try{
+		host = args[1];
+		}
+		 catch(ArrayIndexOutOfBoundsException e) {
 			host = "localhost";
 		}
-
-		ClientConsole chat = new ClientConsole(host, DEFAULT_PORT);
+		
+		try{
+		port = Integer.parseInt(args[2]);
+		} catch(Throwable t){
+		port = DEFAULT_PORT;
+}
+		ClientConsole chat = new ClientConsole(host, port, loginID);
 		chat.accept();
 	}
 }
