@@ -9,10 +9,11 @@ public class ClientConsole implements ChatIF {
 
 	ChatClient client;
 
-	public ClientConsole(String host, int port, String login) {
+	public ClientConsole(String host, int port) {
 		
-			client = new ChatClient(host, port, login,  this);
+			client = new ChatClient(host, port, this);
 	}
+	//client call
 
 	public void accept() {
 		try {
@@ -23,6 +24,7 @@ public class ClientConsole implements ChatIF {
 				while (true) {
 					message = fromConsole.readLine();
 					client.handleMessageFromClientUI(message);
+					//send stream
 			}
 			
 		} catch(NullPointerException e) {}
@@ -32,7 +34,7 @@ public class ClientConsole implements ChatIF {
 	}
 
 	public void display(String message) {
-		System.out.println( message);
+		System.out.println(message);
 	}
 
 	public static void main(String[] args) {
@@ -59,7 +61,7 @@ public class ClientConsole implements ChatIF {
 		} catch(Throwable t){
 		port = DEFAULT_PORT;
 }
-		ClientConsole chat = new ClientConsole(host, port, loginID);
+		ClientConsole chat = new ClientConsole(host, port);
 		chat.accept();
 	}
 }

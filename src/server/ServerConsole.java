@@ -9,7 +9,7 @@ public class ServerConsole implements ChatIF{
 final public static int DEFAULT_PORT = 5555;
 EchoServer server;
 public ServerConsole(int port) throws IOException{
-server = new EchoServer(port, this);
+    server = new EchoServer(port, this);
 }
 
 public void display(String message){
@@ -22,14 +22,18 @@ try{
 BufferedReader fromConsole = new BufferedReader(new InputStreamReader(System.in));
 String message;
 try{
-while(true){
-	message = fromConsole.readLine();
-	server.handleMessageFromServerUI(message);
+    //server: send message to all user
+    while(true){
+	    message = fromConsole.readLine();
+	    server.handleMessageFromServerUI(message);
 	}
 
 } catch(NullPointerException e){}
 } catch(Exception ex){
-display("Unexpected error while reading from console");
+    ex.printStackTrace();
+
+    display("Error");
+
 }
 }
 
@@ -44,7 +48,7 @@ public static void main(String[] args) {
 
         try {
             port = Integer.parseInt(args[0]);
-        } catch(Throwable t) {
+        } catch(ArrayIndexOutOfBoundsException e) {
             port = DEFAULT_PORT;
         }
 
